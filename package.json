@@ -1,0 +1,14 @@
+{
+  "name": "e-pekaryuk-cypress",
+  "version": "1.0.0",
+  "description": "Rozetka Cypress test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eugene Pekaryuk",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^12.12.0"
+  }
+}
