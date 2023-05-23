@@ -14,44 +14,68 @@ describe('template spec', () => {
       if (i == 0 || i == 7 || i == 9 || i == 11) {
         continue;
       }
-      let elemTxt = ''
       cy.get(HomePage.sbElems).eq(i).invoke('text')
-      .then((text) => {
-        cy.get(HomePage.sbElems).eq(i).click()
-        // text = text.replace(/’/g, "'")
-        text = text.replace("’", "'")
-        cy.get(HomePage.headerTxt).contains(text, { matchCase: false })
-        // cy.get(HomePage.headerTxt).should('have.text', text)
-        cy.go('back')
-      })
+        .then((text) => {
+          cy.get(HomePage.sbElems).eq(i).click()
+          // text = text.replace(/’/g, "'")
+          text = text.replace("’", "'")
+          cy.get(HomePage.headerTxt).contains(text, { matchCase: false })
+          // cy.get(HomePage.headerTxt).should('have.text', text)
+          cy.go('back')
+        })
       cy.get(HomePage.sbElems).should('exist')
     }
   })
 
-  it('Should check the price filter', () => {
-    let priceMin = 14372;
-    let priceMax = 18787;
+  it('should check the items names to contain the filtered brand name', () => {
+    // Open the category
+    HomePage.cctvCategoryNav()
 
-    cy.get(HomePage.sbElems).eq(4).click()
-    cy.get(HomePage.subCategories).eq(95).should('exist')
-    cy.get(HomePage.subCategories).eq(95).click()
-    cy.get(HomePage.priceMinFilter).click()
-    cy.get(HomePage.priceMinFilter).clear()
-    cy.get(HomePage.priceMinFilter)
-      .type(priceMin).should('have.value', priceMin)
-    cy.get(HomePage.priceMaxFilter).clear()
-    cy.get(HomePage.priceMaxFilter).click()
-    cy.get(HomePage.priceMaxFilter)
-      .type(priceMax).should('have.value', priceMax)
-    cy.get(HomePage.applyPriceFilterBtn).click()
+    // Apply price filter (optional)
+    HomePage.applyPriceFilter()
+
+    // Brand filter apply
+    cy.get(`[data-id=${Cypress.env('brand_name')}]`).click();
+
+    // Check items names to contain the brand name
+    cy.get(HomePage.itemNames).each(($el, index, $list) => {
+      expect($el.text()).contains(Cypress.env('brand_name'))
+    })
+
+  })
+
+  it('Should check the price filter', () => {
+
+    // Open the category
+    HomePage.cctvCategoryNav()
+
+    //Aply price filter
+    HomePage.applyPriceFilter()
+
+    // Apply brand filters (optional)
     cy.get('[data-id="ATEN"]').click();
     cy.get('[data-id="ATIS"]').click();
     cy.get('[data-id="AVC"]').click();
+
+    // Check items price
     cy.get(HomePage.itemPrices).each(($el, index, $list) => {
       const price = $el.text().replace(/\D/g, '')
       const num = Number(price)
-      expect(num).to.be.gte(priceMin)
-      expect(num).to.be.lte(priceMax)
+      expect(num).to.be.gte(Cypress.env('min_price'))
+      expect(num).to.be.lte(Cypress.env('max_price'))
+    })
+
+    // Remove brand filters
+    cy.get('[data-id="ATEN"]').click();
+    cy.get('[data-id="ATIS"]').click();
+    cy.get('[data-id="AVC"]').click();
+
+    // Check items price
+    cy.get(HomePage.itemPrices).each(($el, index, $list) => {
+      const price = $el.text().replace(/\D/g, '')
+      const num = Number(price)
+      expect(num).to.be.gte(Cypress.env('min_price'))
+      expect(num).to.be.lte(Cypress.env('max_price'))
     })
   })
 })

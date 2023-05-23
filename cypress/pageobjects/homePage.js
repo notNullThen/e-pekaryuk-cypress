@@ -36,7 +36,27 @@ class HomePage {
     itemsThreeDotsBtns = 'rz-popup-menu button'
     itemDelBtn = 'rz-trash-icon button'
 
+    cctvCategoryNav() {
+        cy.get(this.sbElems).eq(4).click()
+        cy.get(this.subCategories).eq(95).should('exist')
+        cy.get(this.subCategories).eq(95).click()
+    }
 
+    applyPriceFilter() {
+        cy.get(this.priceMinFilter).click()
+        cy.get(this.priceMinFilter)
+            .clear().wait(1000).should('have.value', '')
+        cy.get(this.priceMinFilter)
+            .type(Cypress.env('min_price'), { delay: 100 }).should('have.value', Cypress.env('min_price'))
+        cy.get(this.priceMaxFilter)
+            .clear().wait(1000).should('have.value', '')
+        cy.get(this.priceMaxFilter).click()
+        cy.get(this.priceMaxFilter)
+            .type(Cypress.env('max_price'), { delay: 100 }).should('have.value', Cypress.env('max_price'))
+            cy.wait(3000)
+        cy.get(this.applyPriceFilterBtn).contains('Ok')
+        cy.get(this.applyPriceFilterBtn).click()
+    }
 }
 
 export default new HomePage();
