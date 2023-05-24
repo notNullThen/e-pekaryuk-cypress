@@ -40,6 +40,7 @@ class HomePage {
         cy.get(this.sbElems).eq(4).click()
         cy.get(this.subCategories).eq(95).should('exist')
         cy.get(this.subCategories).eq(95).click()
+        cy.wait(3000)
     }
 
     applyPriceFilter() {
@@ -53,9 +54,11 @@ class HomePage {
         cy.get(this.priceMaxFilter).click()
         cy.get(this.priceMaxFilter)
             .type(Cypress.env('max_price'), { delay: 100 }).should('have.value', Cypress.env('max_price'))
-            cy.wait(3000)
-        cy.get(this.applyPriceFilterBtn).contains('Ok')
-        cy.get(this.applyPriceFilterBtn).click()
+        cy.wait(3000)
+        cy.get(this.applyPriceFilterBtn)
+            .contains('Ok')
+            .click()
+        cy.wait(3000)
     }
 }
 

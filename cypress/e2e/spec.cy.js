@@ -22,6 +22,7 @@ describe('template spec', () => {
           cy.get(HomePage.headerTxt).contains(text, { matchCase: false })
           // cy.get(HomePage.headerTxt).should('have.text', text)
           cy.go('back')
+          cy.wait(3000)
         })
       cy.get(HomePage.sbElems).should('exist')
     }
@@ -76,6 +77,22 @@ describe('template spec', () => {
       const num = Number(price)
       expect(num).to.be.gte(Cypress.env('min_price'))
       expect(num).to.be.lte(Cypress.env('max_price'))
+    })
+  })
+
+  it('Should check the price sorting', () => {
+    HomePage.cctvCategoryNav()
+    cy.wait(5000)
+    cy.get(HomePage.sortingSelector)
+      .select('1: cheap')
+      .should('have.value', '1: cheap')
+    cy.wait(5000)
+
+    let prevElem = 0
+    cy.get(HomePage.itemPrices).each(($el) => {
+      const priceInt = Number($el.text().replace(/\D/g, ''))
+      expect(priceInt >= prevElem).to.be.true
+      prevElem = priceInt
     })
   })
 })
