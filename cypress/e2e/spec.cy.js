@@ -17,14 +17,10 @@ describe('template spec', () => {
       cy.get(HomePage.sbElems).eq(i).invoke('text')
         .then((text) => {
           cy.get(HomePage.sbElems).eq(i).click()
-          // text = text.replace(/’/g, "'")
           text = text.replace("’", "'")
           cy.get(HomePage.headerTxt).contains(text, { matchCase: false })
-          // cy.get(HomePage.headerTxt).should('have.text', text)
           cy.go('back')
-          cy.wait(3000)
         })
-      cy.get(HomePage.sbElems).should('exist')
     }
   })
 
@@ -82,11 +78,10 @@ describe('template spec', () => {
 
   it('Should check the price sorting', () => {
     HomePage.cctvCategoryNav()
-    cy.wait(5000)
-    cy.get(HomePage.sortingSelector)
-      .select('1: cheap')
-      .should('have.value', '1: cheap')
-    cy.wait(5000)
+    cy.get(HomePage.sortingSelector).select('1: cheap')
+    cy.should('have.value', '1: cheap')
+    cy.intercept('GET', /https:\/\/common-api\.rozetka\.com\.ua\/v2\/goods\/get-price.*/).as('get-price')
+    cy.wait('@get-price').its('response.statusCode').should('eq', 200)
 
     let prevElem = 0
     cy.get(HomePage.itemPrices).each(($el) => {

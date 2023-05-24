@@ -38,27 +38,28 @@ class HomePage {
 
     cctvCategoryNav() {
         cy.get(this.sbElems).eq(4).click()
-        cy.get(this.subCategories).eq(95).should('exist')
         cy.get(this.subCategories).eq(95).click()
-        cy.wait(3000)
+        cy.intercept('GET', 'https://design.rozetka.com.ua/assets/common/img/icons/sprite.svg')
+            .as('get-banners')
+        cy.wait('@get-banners').its('response.statusCode').should('eq', 200)
     }
 
     applyPriceFilter() {
         cy.get(this.priceMinFilter).click()
         cy.get(this.priceMinFilter)
-            .clear().wait(1000).should('have.value', '')
+            .clear().should('have.value', '')
         cy.get(this.priceMinFilter)
             .type(Cypress.env('min_price'), { delay: 100 }).should('have.value', Cypress.env('min_price'))
         cy.get(this.priceMaxFilter)
-            .clear().wait(1000).should('have.value', '')
+            .clear().should('have.value', '')
         cy.get(this.priceMaxFilter).click()
         cy.get(this.priceMaxFilter)
             .type(Cypress.env('max_price'), { delay: 100 }).should('have.value', Cypress.env('max_price'))
-        cy.wait(3000)
         cy.get(this.applyPriceFilterBtn)
             .contains('Ok')
-            .click()
-        cy.wait(3000)
+        cy.get(this.applyPriceFilterBtn).click()
+        cy.intercept('GET', /https:\/\/common-api\.rozetka\.com\.ua\/v2\/goods\/get-price.*/).as('get-price')
+        cy.wait('@get-price').its('response.statusCode').should('eq', 200)
     }
 }
 
