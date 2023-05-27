@@ -5,6 +5,8 @@ import { brandFilter } from "../models/brandFilter.js";
 import { selectSortingOption } from "../models/filtersSortings.js";
 import { categoriesNamesCheck } from "../models/categoriesNav.js";
 import { checkBasket } from "../models/basket.js";
+import { searchSuggestionsCheck } from "../models/search.js";
+import { searchItemsCheck } from "../models/search.js";
 
 describe("template spec", () => {
   beforeEach(() => {
@@ -23,8 +25,8 @@ describe("template spec", () => {
     categoryNav(5, 96);
 
     // Declare price variables
-    let minPrice = Cypress.env("min_price");
-    let maxPrice = Cypress.env("max_price");
+    const minPrice = Cypress.env("min_price");
+    const maxPrice = Cypress.env("max_price");
 
     applyPriceFilter(minPrice, maxPrice);
 
@@ -55,7 +57,14 @@ describe("template spec", () => {
     checkBasket(5);
   });
 
-  it("should check the items names to contain the filtered brand name", () => {
+  it("Should test the search function", () => {
+    const searchQuery = "GoOgLe PiXeL";
+    searchSuggestionsCheck(searchQuery);
+    searchItemsCheck(searchQuery);
+  });
+
+  // This test should fail
+  it("Should check the items names to contain the filtered brand name", () => {
     // Open the CCTV category
     categoryNav(5, 96);
 

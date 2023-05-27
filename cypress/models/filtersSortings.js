@@ -63,7 +63,7 @@ export function selectSortingOption(optionNum, check) {
   if (check) {
     let prevElem = 0;
     homePage.itemPrices().each(($el, index) => {
-      let priceInt = Number($el.text().replace(/\D/g, ""));
+      const priceInt = Number($el.text().replace(/\D/g, ""));
       if (index == 0) {
         prevElem = priceInt;
       } else {

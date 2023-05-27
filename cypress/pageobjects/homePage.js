@@ -8,6 +8,9 @@ class HomePage {
   searchSuggestions() {
     return cy.get("header form a > span");
   }
+  searchHeaderText() {
+    return cy.get("rz-search h1");
+  }
   sbElems() {
     return cy.get("aside rz-sidebar-fat-menu a");
   }

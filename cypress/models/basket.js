@@ -53,7 +53,7 @@ export function checkBasket(itemsCount) {
 
   homePage.basketSum().then(($el) => {
     cy.wrap(priceStoreSum).should("deep.equal", basketCalcSum);
-    let basketItemsPricesSum = Number($el.text().replace(/\D/g, ""));
+    const basketItemsPricesSum = Number($el.text().replace(/\D/g, ""));
     cy.wrap(priceStoreSum).should("deep.equal", basketItemsPricesSum);
     cy.wrap(priceStoreArr).should("deep.equal", priceBasketArr);
   });

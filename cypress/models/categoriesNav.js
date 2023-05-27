@@ -21,19 +21,22 @@ export function categoryNav(categoryNum, subcategoryNum) {
 }
 
 export function categoriesNamesCheck() {
-  for (let i = 0; i < 15; i++) {
-    if (i == 0 || i == 7 || i == 9 || i == 11) {
-      continue;
-    }
-    homePage
-      .sbElems()
-      .eq(i)
-      .invoke("text")
-      .then((text) => {
-        homePage.sbElems().eq(i).click();
-        text = text.replace("’", "'");
-        homePage.headerTxt().contains(text, { matchCase: false });
-        cy.go("back");
+  homePage.sbElems().each(($el, index) => {
+    if (
+      index == 0 ||
+      index == 1 ||
+      index == 7 ||
+      index == 9 ||
+      index == 11 ||
+      index == 16
+    ) {
+    } else {
+      const sbElText = $el.text().replace("’", "'");
+      homePage.sbElems().eq(index).click();
+      homePage.headerTxt().then(($el) => {
+        expect($el.text()).contains(sbElText, { matchCase: false });
       });
-  }
+      cy.go("back");
+    }
+  });
 }
