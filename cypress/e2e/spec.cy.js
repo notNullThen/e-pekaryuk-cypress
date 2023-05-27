@@ -1,8 +1,8 @@
-import { applyPriceFilter } from "../models/filters.js";
-import { checkItemsPrices } from "../models/filters.js";
+import { applyPriceFilter } from "../models/filtersSortings.js";
+import { checkItemsPrices } from "../models/filtersSortings.js";
 import { categoryNav } from "../models/categoriesNav.js";
 import { brandFilter } from "../models/brandFilter.js";
-import { selectSortingOption } from "../models/filters.js";
+import { selectSortingOption } from "../models/filtersSortings.js";
 import { categoriesNamesCheck } from "../models/categoriesNav.js";
 import { checkBasket } from "../models/basket.js";
 
@@ -17,13 +17,6 @@ describe("template spec", () => {
 
   it("Compare the sidebar categories names with opened pages names", () => {
     categoriesNamesCheck();
-  });
-
-  it("should check the items names to contain the filtered brand name", () => {
-    // Open the CCTV category
-    categoryNav(5, 96);
-
-    brandFilter(Cypress.env("brand_name"), true);
   });
 
   it("Should check the price filter", () => {
@@ -60,5 +53,12 @@ describe("template spec", () => {
   it("Should test the basket", () => {
     categoryNav(8, 5);
     checkBasket(5);
+  });
+
+  it("should check the items names to contain the filtered brand name", () => {
+    // Open the CCTV category
+    categoryNav(5, 96);
+
+    brandFilter(Cypress.env("brand_name"), true);
   });
 });
