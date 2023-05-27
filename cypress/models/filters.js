@@ -18,6 +18,7 @@ export function applyPriceFilter(minPrice, maxPrice) {
   homePage.priceMaxFilter().type(maxPrice, { delay: 100 });
   homePage.priceMaxFilter().should("have.value", maxPrice);
   homePage.applyPriceFilterBtn().contains("Ok");
+
   cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
   homePage.applyPriceFilterBtn().click();
   cy.wait("@get-price", { timeout: 10000 })
@@ -26,7 +27,7 @@ export function applyPriceFilter(minPrice, maxPrice) {
 }
 
 export function checkItemsPrices(minPrice, maxPrice) {
-  homePage.itemPrices().each(($el, index, $list) => {
+  homePage.itemPrices().each(($el) => {
     const priceStr = $el.text().replace(/\D/g, "");
     const priceInt = Number(priceStr);
     expect(priceInt).to.be.gte(minPrice);
@@ -36,6 +37,7 @@ export function checkItemsPrices(minPrice, maxPrice) {
 
 export function selectSortingOption(optionNum, check) {
   let optionName = "";
+
   switch (optionNum) {
     case 1:
       optionName = "1: cheap";
@@ -50,15 +52,17 @@ export function selectSortingOption(optionNum, check) {
       optionName = "4: rank";
       break;
   }
+
   cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
   homePage.sortingSelector().select(optionName);
   cy.should("have.value", optionName);
   cy.wait("@get-price", { timeout: 10000 })
     .its("response.statusCode")
     .should("eq", 200);
+
   if (check) {
     let prevElem = 0;
-    homePage.itemPrices().each(($el, index, $list) => {
+    homePage.itemPrices().each(($el, index) => {
       let priceInt = Number($el.text().replace(/\D/g, ""));
       if (index == 0) {
       } else {
@@ -71,6 +75,7 @@ export function selectSortingOption(optionNum, check) {
             break;
         }
       }
+
       prevElem = priceInt;
     });
   }

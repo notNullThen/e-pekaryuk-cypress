@@ -7,15 +7,16 @@ export function categoryNav(categoryNum, subcategoryNum) {
   if (categoryNum != false) {
     cy.visit("/");
     categoryNum--;
+
     homePage.sbElems().eq(categoryNum).click();
     if (subcategoryNum != false) {
       subcategoryNum--;
+      cy.intercept("GET", /.*goods\/labels.*/).as("get-labels");
       homePage.subCategories().eq(subcategoryNum).click();
+      cy.wait("@get-labels", { timeout: 10000 })
+        .its("response.statusCode")
+        .should("eq", 200);
     }
-    cy.intercept("GET", /.*goods\/labels.*/).as("get-labels");
-    cy.wait("@get-labels", { timeout: 10000 })
-      .its("response.statusCode")
-      .should("eq", 200);
   }
 }
 

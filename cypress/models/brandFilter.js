@@ -9,7 +9,7 @@ export function brandFilter(brandName, check) {
     .its("response.statusCode")
     .should("eq", 200);
   if (check) {
-    homePage.itemNames().each(($el, index, $list) => {
+    homePage.itemNames().each(($el) => {
       expect($el.text()).contains(brandName);
     });
   }

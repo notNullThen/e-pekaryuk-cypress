@@ -7,13 +7,13 @@ export function checkBasket(itemsCount) {
   let priceStoreArr = [];
   let priceStoreSum = 0;
 
-  homePage.itemNames().each(($el, index, $list) => {
+  homePage.itemNames().each(($el, index) => {
     if (index < itemsCount) {
       itemsStoreNamesArr.push($el.text());
     }
   });
 
-  homePage.itemPrices().each(($el, index, $list) => {
+  homePage.itemPrices().each(($el, index) => {
     if (index < itemsCount) {
       const priceStr = $el.text().replace(/\D/g, "");
       const priceInt = Number(priceStr);
@@ -22,7 +22,7 @@ export function checkBasket(itemsCount) {
     }
   });
 
-  homePage.itemsBasketBtn().each(($el, index, $list) => {
+  homePage.itemsBasketBtn().each(($el, index) => {
     cy.intercept("POST", /.*cart-se\/add.*/).as("add-to-busket");
     if (index < itemsCount) {
       cy.wrap($el).click();
@@ -43,6 +43,7 @@ export function checkBasket(itemsCount) {
     itemsBasketNamesArr.push($el.text());
     basketItemsCount++;
   });
+
   homePage.basketPriceValues().each(($el) => {
     const priceStr = $el.text().replace(/\D/g, "");
     const priceInt = Number(priceStr);
