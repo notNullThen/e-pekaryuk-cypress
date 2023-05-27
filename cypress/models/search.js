@@ -1,6 +1,8 @@
 import HomePage from "../pageobjects/homePage.js";
+import ItemsPage from "../pageobjects/itemsPage.js";
 
 const homePage = new HomePage();
+const itemsPage = new ItemsPage();
 
 export function searchSuggestionsCheck(searchQuery) {
   homePage.searchField().click();
@@ -29,7 +31,7 @@ export function searchItemsCheck(searchQuery) {
   cy.wait("@get-price", { timeout: 10000 })
     .its("response.statusCode")
     .should("eq", 200);
-  homePage.itemNames().each(($el) => {
+  itemsPage.itemNames().each(($el) => {
     const text = $el.text().toLowerCase();
     expect(text).contains(searchQuery.toLowerCase(), { matchCase: false });
   });

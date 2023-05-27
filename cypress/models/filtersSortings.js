@@ -1,33 +1,33 @@
-import HomePage from "../pageobjects/homePage.js";
+import ItemsPage from "../pageobjects/itemsPage.js";
 
-const homePage = new HomePage();
+const itemsPage = new ItemsPage();
 
 export function brandFilter(brandName) {
   cy.get(`[data-id=${brandName}]`).click();
 }
 
 export function applyPriceFilter(minPrice, maxPrice) {
-  homePage.priceMinFilter().click();
-  homePage.priceMinFilter().clear();
-  homePage.priceMinFilter().should("have.value", "");
-  homePage.priceMinFilter().type(minPrice, { delay: 100 });
-  homePage.priceMinFilter().should("have.value", minPrice);
-  homePage.priceMaxFilter().clear();
-  homePage.priceMaxFilter().should("have.value", "");
-  homePage.priceMaxFilter().click();
-  homePage.priceMaxFilter().type(maxPrice, { delay: 100 });
-  homePage.priceMaxFilter().should("have.value", maxPrice);
-  homePage.applyPriceFilterBtn().contains("Ok");
+  itemsPage.priceMinFilter().click();
+  itemsPage.priceMinFilter().clear();
+  itemsPage.priceMinFilter().should("have.value", "");
+  itemsPage.priceMinFilter().type(minPrice, { delay: 100 });
+  itemsPage.priceMinFilter().should("have.value", minPrice);
+  itemsPage.priceMaxFilter().clear();
+  itemsPage.priceMaxFilter().should("have.value", "");
+  itemsPage.priceMaxFilter().click();
+  itemsPage.priceMaxFilter().type(maxPrice, { delay: 100 });
+  itemsPage.priceMaxFilter().should("have.value", maxPrice);
+  itemsPage.applyPriceFilterBtn().contains("Ok");
 
   cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
-  homePage.applyPriceFilterBtn().click();
+  itemsPage.applyPriceFilterBtn().click();
   cy.wait("@get-price", { timeout: 10000 })
     .its("response.statusCode")
     .should("eq", 200);
 }
 
 export function checkItemsPrices(minPrice, maxPrice) {
-  homePage.itemPrices().each(($el) => {
+  itemsPage.itemPrices().each(($el) => {
     const priceStr = $el.text().replace(/\D/g, "");
     const priceInt = Number(priceStr);
     expect(priceInt).to.be.gte(minPrice);
@@ -54,7 +54,7 @@ export function selectSortingOption(optionNum, check) {
   }
 
   cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
-  homePage.sortingSelector().select(optionName);
+  itemsPage.sortingSelector().select(optionName);
   cy.should("have.value", optionName);
   cy.wait("@get-price", { timeout: 10000 })
     .its("response.statusCode")
@@ -62,7 +62,7 @@ export function selectSortingOption(optionNum, check) {
 
   if (check) {
     let prevElem = 0;
-    homePage.itemPrices().each(($el, index) => {
+    itemsPage.itemPrices().each(($el, index) => {
       const priceInt = Number($el.text().replace(/\D/g, ""));
       if (index == 0) {
         prevElem = priceInt;

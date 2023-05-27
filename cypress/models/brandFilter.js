@@ -1,6 +1,6 @@
-import HomePage from "../pageobjects/homePage.js";
+import ItemsPage from "../pageobjects/itemsPage.js";
 
-const homePage = new HomePage();
+const itemsPage = new ItemsPage();
 
 export function brandFilter(brandName, check) {
   cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
@@ -9,7 +9,7 @@ export function brandFilter(brandName, check) {
     .its("response.statusCode")
     .should("eq", 200);
   if (check) {
-    homePage.itemNames().each(($el) => {
+    itemsPage.itemNames().each(($el) => {
       expect($el.text()).contains(brandName);
     });
   }

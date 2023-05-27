@@ -1,19 +1,21 @@
-import HomePage from "../pageobjects/homePage.js";
+import Page from "../pageobjects/page.js";
+import ItemsPage from "../pageobjects/itemsPage.js";
 
-const homePage = new HomePage();
+const page = new Page();
+const itemsPage = new ItemsPage();
 
 export function checkBasket(itemsCount) {
   let itemsStoreNamesArr = [];
   let priceStoreArr = [];
   let priceStoreSum = 0;
 
-  homePage.itemNames().each(($el, index) => {
+  itemsPage.itemNames().each(($el, index) => {
     if (index < itemsCount) {
       itemsStoreNamesArr.push($el.text());
     }
   });
 
-  homePage.itemPrices().each(($el, index) => {
+  itemsPage.itemPrices().each(($el, index) => {
     if (index < itemsCount) {
       const priceStr = $el.text().replace(/\D/g, "");
       const priceInt = Number(priceStr);
@@ -22,7 +24,7 @@ export function checkBasket(itemsCount) {
     }
   });
 
-  homePage.itemsBasketBtn().each(($el, index) => {
+  page.itemsBasketBtn().each(($el, index) => {
     cy.intercept("POST", /.*cart-se\/add.*/).as("add-to-busket");
     if (index < itemsCount) {
       cy.wrap($el).click();
@@ -32,26 +34,26 @@ export function checkBasket(itemsCount) {
     }
   });
 
-  homePage.basketBtn().click();
+  page.basketBtn().click();
 
   let itemsBasketNamesArr = [];
   let priceBasketArr = [];
   let basketCalcSum = 0;
   let basketItemsCount = 0;
 
-  homePage.basketItemNames().each(($el) => {
+  page.basketItemNames().each(($el) => {
     itemsBasketNamesArr.push($el.text());
     basketItemsCount++;
   });
 
-  homePage.basketPriceValues().each(($el) => {
+  page.basketPriceValues().each(($el) => {
     const priceStr = $el.text().replace(/\D/g, "");
     const priceInt = Number(priceStr);
     priceBasketArr.unshift(priceInt);
     basketCalcSum += priceInt;
   });
 
-  homePage.basketSum().then(($el) => {
+  page.basketSum().then(($el) => {
     cy.wrap(priceStoreSum).should("deep.equal", basketCalcSum);
     const basketItemsPricesSum = Number($el.text().replace(/\D/g, ""));
     cy.wrap(priceStoreSum).should("deep.equal", basketItemsPricesSum);
