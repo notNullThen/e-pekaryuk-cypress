@@ -10,10 +10,6 @@ import { searchItemsCheck } from "../models/search.js";
 
 describe("template spec", () => {
   beforeEach(() => {
-    Cypress.on("uncaught:exception", (err, runnable) => {
-      return false;
-    });
-
     cy.visit("/");
   });
 
