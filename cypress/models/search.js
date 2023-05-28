@@ -6,14 +6,12 @@ const itemsPage = new ItemsPage();
 
 export function searchSuggestionsCheck(searchQuery) {
   homePage.searchField().click();
-  cy.intercept("GET", /.*search.*autocomplete.*/).as("search-autocomplete");
   homePage.searchField().clear();
   homePage.searchField().should("have.value", "");
+  cy.interceptSearchAutocomplete();
   homePage.searchField().type(searchQuery);
   homePage.searchField().should("have.value", searchQuery);
-  cy.wait("@search-autocomplete", { timeout: 10000 })
-    .its("response.statusCode")
-    .should("eq", 200);
+  cy.waitSearchAutocomplete();
   homePage.searchSuggestions().each(($el) => {
     const text = $el.text().toLowerCase();
     expect(text).contains(searchQuery.toLowerCase(), { matchCase: false });
@@ -22,15 +20,12 @@ export function searchSuggestionsCheck(searchQuery) {
 
 export function searchItemsCheck(searchQuery) {
   homePage.searchField().click();
-  cy.intercept("GET", /.*search.*autocomplete.*/).as("search-autocomplete");
   homePage.searchField().clear();
   homePage.searchField().should("have.value", "");
-  cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
+  cy.interceptGetPrice();
   homePage.searchField().type(`${searchQuery}{enter}`);
   homePage.searchField().should("have.value", searchQuery);
-  cy.wait("@get-price", { timeout: 10000 })
-    .its("response.statusCode")
-    .should("eq", 200);
+  cy.waitGetPrice();
   itemsPage.itemNames().each(($el) => {
     const text = $el.text().toLowerCase();
     expect(text).contains(searchQuery.toLowerCase(), { matchCase: false });

@@ -25,12 +25,10 @@ export function checkBasket(itemsCount) {
   });
 
   page.itemsBasketBtn().each(($el, index) => {
-    cy.intercept("POST", /.*cart-se\/add.*/).as("add-to-busket");
     if (index < itemsCount) {
+      cy.interceptAddToBusket();
       cy.wrap($el).click();
-      cy.wait("@add-to-busket", { timeout: 10000 })
-        .its("response.statusCode")
-        .should("eq", 200);
+      cy.waitAddToBusket();
     }
   });
 

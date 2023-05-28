@@ -19,11 +19,9 @@ export function applyPriceFilter(minPrice, maxPrice) {
   itemsPage.priceMaxFilter().should("have.value", maxPrice);
   itemsPage.applyPriceFilterBtn().contains("Ok");
 
-  cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
+  cy.interceptGetPrice();
   itemsPage.applyPriceFilterBtn().click();
-  cy.wait("@get-price", { timeout: 10000 })
-    .its("response.statusCode")
-    .should("eq", 200);
+  cy.waitGetPrice();
 }
 
 export function checkItemsPrices(minPrice, maxPrice) {
@@ -53,12 +51,10 @@ export function selectSortingOption(optionNum, check) {
       break;
   }
 
-  cy.intercept("GET", /.*goods\/get-price.*/).as("get-price");
+  cy.interceptGetPrice();
   itemsPage.sortingSelector().select(optionName);
   cy.should("have.value", optionName);
-  cy.wait("@get-price", { timeout: 10000 })
-    .its("response.statusCode")
-    .should("eq", 200);
+  cy.waitGetPrice();
 
   if (check) {
     let prevElem = 0;

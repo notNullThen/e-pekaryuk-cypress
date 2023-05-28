@@ -15,11 +15,9 @@ export function categoryNav(categoryNum, subcategoryNum) {
     homePage.sbElems().eq(categoryNum).click();
     if (subcategoryNum != false) {
       subcategoryNum--;
-      cy.intercept("GET", /.*goods\/labels.*/).as("get-labels");
+      cy.interceptLabels();
       categoryPage.subCategories().eq(subcategoryNum).click();
-      cy.wait("@get-labels", { timeout: 10000 })
-        .its("response.statusCode")
-        .should("eq", 200);
+      cy.waitLabels();
     }
   }
 }
