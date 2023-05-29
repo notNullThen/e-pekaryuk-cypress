@@ -69,3 +69,7 @@ Cypress.Commands.add("waitSearchAutocomplete", () => {
     .its("response.statusCode")
     .should("eq", 200);
 });
+
+Cypress.Commands.add("clickBrandFilter", (brandName) => {
+  cy.get(`[data-id=${brandName}]`).click();
+});

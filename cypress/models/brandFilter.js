@@ -4,7 +4,7 @@ const itemsPage = new ItemsPage();
 
 export function brandFilter(brandName, check) {
   cy.interceptGetPrice();
-  cy.get(`[data-id=${brandName}]`).click();
+  cy.clickBrandFilter(brandName);
   cy.waitGetPrice();
   if (check) {
     itemsPage.itemNames().each(($el) => {

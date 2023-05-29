@@ -3,7 +3,7 @@ import ItemsPage from "../pageobjects/itemsPage.js";
 const itemsPage = new ItemsPage();
 
 export function brandFilter(brandName) {
-  cy.get(`[data-id=${brandName}]`).click();
+  cy.clickBrandFilter(brandName);
 }
 
 export function applyPriceFilter(minPrice, maxPrice) {
