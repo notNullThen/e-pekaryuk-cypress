@@ -59,7 +59,6 @@ describe("template spec", () => {
     searchItemsCheck(searchQuery);
   });
 
-  // This test should fail
   it("Should check the items names to contain the filtered brand name", () => {
     // Open the CCTV category
     categoryNav(5, 96);

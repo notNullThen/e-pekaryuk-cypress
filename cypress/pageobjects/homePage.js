@@ -9,7 +9,7 @@ class HomePage {
     return cy.get("header form a > span");
   }
   sbElems() {
-    return cy.get("aside rz-sidebar-fat-menu a");
+    return cy.get("aside rz-sidebar-fat-menu a", { timeout: 10000 });
   }
 }
 
