@@ -23,26 +23,25 @@ export function categoryNav(categoryNum, subcategoryNum) {
 }
 
 export function categoriesNamesCheck() {
-  homePage.sbElems().its('length').then((length) => {
-    for (let i = 0; i < length; i++) {
-      homePage.sbElems().eq(i).then(($el) => {
-        if (
-          i == 0 ||
-          i == 1 ||
-          i == 7 ||
-          i == 9 ||
-          i == 11 ||
-          i == 16
-        ) {
-        } else {
-          const sbElText = $el.text().replace("’", "'");
-          homePage.sbElems().eq(i).click();
-          page.headerTxt().then(($el) => {
-            expect($el.text()).contains(sbElText, { matchCase: false });
+  homePage
+    .sbElems()
+    .its("length")
+    .then((length) => {
+      for (let i = 0; i < length; i++) {
+        homePage
+          .sbElems()
+          .eq(i)
+          .then(($el) => {
+            if (i == 0 || i == 1 || i == 7 || i == 9 || i == 11 || i == 16) {
+            } else {
+              const sbElText = $el.text().replace("’", "'");
+              homePage.sbElems().eq(i).click();
+              page.headerTxt().then(($el) => {
+                expect($el.text()).contains(sbElText, { matchCase: false });
+              });
+              cy.go("back");
+            }
           });
-          cy.go("back");
-        }
-      })
-    }
-  });
+      }
+    });
 }

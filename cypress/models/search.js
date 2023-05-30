@@ -9,14 +9,22 @@ export function searchSuggestionsCheck(searchQuery) {
   cy.interceptSearchAutocomplete();
   homePage.searchField().type(searchQuery).should("have.value", searchQuery);
   cy.waitSearchAutocomplete();
-  homePage.searchSuggestions().its('length').then((length) => {
-    for (let i = 0; i < length; i++) {
-      homePage.searchSuggestions().eq(i).then(($el) => {
-        const text = $el.text().toLowerCase();
-        expect(text).contains(searchQuery.toLowerCase(), { matchCase: false });
-      })
-    }
-  });
+  homePage
+    .searchSuggestions()
+    .its("length")
+    .then((length) => {
+      for (let i = 0; i < length; i++) {
+        homePage
+          .searchSuggestions()
+          .eq(i)
+          .then(($el) => {
+            const text = $el.text().toLowerCase();
+            expect(text).contains(searchQuery.toLowerCase(), {
+              matchCase: false,
+            });
+          });
+      }
+    });
 }
 
 export function searchItemsCheck(searchQuery) {
@@ -27,12 +35,20 @@ export function searchItemsCheck(searchQuery) {
     .type(`${searchQuery}{enter}`)
     .should("have.value", searchQuery);
   cy.waitGetPrice();
-  itemsPage.itemNames().its('length').then((length) => {
-    for (let i = 0; i < length; i++) {
-      itemsPage.itemNames().eq(i).then(($el) => {
-        const text = $el.text().toLowerCase();
-        expect(text).contains(searchQuery.toLowerCase(), { matchCase: false });
-      })
-    }
-  });
+  itemsPage
+    .itemNames()
+    .its("length")
+    .then((length) => {
+      for (let i = 0; i < length; i++) {
+        itemsPage
+          .itemNames()
+          .eq(i)
+          .then(($el) => {
+            const text = $el.text().toLowerCase();
+            expect(text).contains(searchQuery.toLowerCase(), {
+              matchCase: false,
+            });
+          });
+      }
+    });
 }

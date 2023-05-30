@@ -39,25 +39,37 @@ export function checkBasket(itemsCount) {
   let basketCalcSum = 0;
   let basketItemsCount = 0;
 
-  page.basketItemNames().its('length').then((length) => {
-    for (let i = 0; i < length; i++) {
-      page.basketItemNames().eq(i).then(($el) => {
-        itemsBasketNamesArr.push($el.text());
-        basketItemsCount++;
-      })
-    }
-  });
+  page
+    .basketItemNames()
+    .its("length")
+    .then((length) => {
+      for (let i = 0; i < length; i++) {
+        page
+          .basketItemNames()
+          .eq(i)
+          .then(($el) => {
+            itemsBasketNamesArr.push($el.text());
+            basketItemsCount++;
+          });
+      }
+    });
 
-  page.basketPriceValues().its('length').then((length) => {
-    for (let i = 0; i < length; i++) {
-      page.basketPriceValues().eq(i).then(($el) => {
-        const priceStr = $el.text().replace(/\D/g, "");
-        const priceInt = Number(priceStr);
-        priceBasketArr.unshift(priceInt);
-        basketCalcSum += priceInt;
-      })
-    }
-  });
+  page
+    .basketPriceValues()
+    .its("length")
+    .then((length) => {
+      for (let i = 0; i < length; i++) {
+        page
+          .basketPriceValues()
+          .eq(i)
+          .then(($el) => {
+            const priceStr = $el.text().replace(/\D/g, "");
+            const priceInt = Number(priceStr);
+            priceBasketArr.unshift(priceInt);
+            basketCalcSum += priceInt;
+          });
+      }
+    });
 
   page.basketSum().then(($el) => {
     cy.wrap(priceStoreSum).should("deep.equal", basketCalcSum);
