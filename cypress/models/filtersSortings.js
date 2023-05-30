@@ -7,16 +7,20 @@ export function brandFilter(brandName) {
 }
 
 export function applyPriceFilter(minPrice, maxPrice) {
-  itemsPage.priceMinFilter().click();
-  itemsPage.priceMinFilter().clear();
-  itemsPage.priceMinFilter().should("have.value", "");
-  itemsPage.priceMinFilter().type(minPrice, { delay: 100 });
-  itemsPage.priceMinFilter().should("have.value", minPrice);
-  itemsPage.priceMaxFilter().clear();
-  itemsPage.priceMaxFilter().should("have.value", "");
-  itemsPage.priceMaxFilter().click();
-  itemsPage.priceMaxFilter().type(maxPrice, { delay: 100 });
-  itemsPage.priceMaxFilter().should("have.value", maxPrice);
+  itemsPage
+    .priceMinFilter()
+    .click()
+    .clear()
+    .should("have.value", "")
+    .type(minPrice, { delay: 100 })
+    .should("have.value", minPrice);
+  itemsPage
+    .priceMaxFilter()
+    .clear()
+    .should("have.value", "")
+    .click()
+    .type(maxPrice, { delay: 100 })
+    .should("have.value", maxPrice);
   itemsPage.applyPriceFilterBtn().contains("Ok");
 
   cy.interceptGetPrice();
@@ -25,11 +29,15 @@ export function applyPriceFilter(minPrice, maxPrice) {
 }
 
 export function checkItemsPrices(minPrice, maxPrice) {
-  itemsPage.itemPrices().each(($el) => {
-    const priceStr = $el.text().replace(/\D/g, "");
-    const priceInt = Number(priceStr);
-    expect(priceInt).to.be.gte(minPrice);
-    expect(priceInt).to.be.lte(maxPrice);
+  itemsPage.itemPrices().its('length').then((length) => {
+    for (let i = 0; i < length; i++) {
+      itemsPage.itemPrices().eq(i).then(($el) => {
+        const priceStr = $el.text().replace(/\D/g, "");
+        const priceInt = Number(priceStr);
+        expect(priceInt).to.be.gte(minPrice);
+        expect(priceInt).to.be.lte(maxPrice);
+      })
+    }
   });
 }
 
@@ -58,22 +66,26 @@ export function selectSortingOption(optionNum, check) {
 
   if (check) {
     let prevElem = 0;
-    itemsPage.itemPrices().each(($el, index) => {
-      const priceInt = Number($el.text().replace(/\D/g, ""));
-      if (index == 0) {
-        prevElem = priceInt;
-      } else {
-        switch (optionNum) {
-          case 1:
-            expect(priceInt >= prevElem).to.be.true;
-            break;
-          case 2:
-            expect(priceInt <= prevElem).to.be.true;
-            break;
-        }
+    itemsPage.itemPrices().its('length').then((length) => {
+      for (let i = 0; i < length; i++) {
+        itemsPage.itemPrices().eq(i).then(($el) => {
+          const priceInt = Number($el.text().replace(/\D/g, ""));
+          if (i == 0) {
+            prevElem = priceInt;
+          } else {
+            switch (optionNum) {
+              case 1:
+                expect(priceInt >= prevElem).to.be.true;
+                break;
+              case 2:
+                expect(priceInt <= prevElem).to.be.true;
+                break;
+            }
+          }
+  
+          prevElem = priceInt;
+        })
       }
-
-      prevElem = priceInt;
     });
   }
 }

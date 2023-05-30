@@ -24,16 +24,6 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import Page from "../pageobjects/page";
-import HomePage from "../pageobjects/homePage";
-import ItemsPage from "../pageobjects/itemsPage";
-import CategoryPage from "../pageobjects/categoryPage";
-
-const page = new Page();
-const homePage = new HomePage();
-const itemsPage = new ItemsPage();
-const categoryPage = new CategoryPage();
-
 Cypress.Commands.add("interceptLabels", () => {
   cy.intercept("GET", /.*goods\/labels.*/).as("get-labels");
 });

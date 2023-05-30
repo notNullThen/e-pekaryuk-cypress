@@ -9,25 +9,25 @@ export function checkBasket(itemsCount) {
   let priceStoreArr = [];
   let priceStoreSum = 0;
 
-  itemsPage.itemNames().each(($el, index) => {
-    if (index < itemsCount) {
-      itemsStoreNamesArr.push($el.text());
+  itemsPage.itemNames().then(($els) => {
+    for (let i = 0; i < itemsCount; i++) {
+      itemsStoreNamesArr.push($els.eq(i).text());
     }
   });
 
-  itemsPage.itemPrices().each(($el, index) => {
-    if (index < itemsCount) {
-      const priceStr = $el.text().replace(/\D/g, "");
+  itemsPage.itemPrices().then(($els) => {
+    for (let i = 0; i < itemsCount; i++) {
+      const priceStr = $els.eq(i).text().replace(/\D/g, "");
       const priceInt = Number(priceStr);
       priceStoreArr.push(priceInt);
       priceStoreSum += priceInt;
     }
   });
 
-  page.itemsBasketBtn().each(($el, index) => {
-    if (index < itemsCount) {
+  page.itemsBasketBtn().then(($els) => {
+    for (let i = 0; i < itemsCount; i++) {
       cy.interceptAddToBusket();
-      cy.wrap($el).click();
+      cy.wrap($els.eq(i)).click();
       cy.waitAddToBusket();
     }
   });
@@ -39,16 +39,24 @@ export function checkBasket(itemsCount) {
   let basketCalcSum = 0;
   let basketItemsCount = 0;
 
-  page.basketItemNames().each(($el) => {
-    itemsBasketNamesArr.push($el.text());
-    basketItemsCount++;
+  page.basketItemNames().its('length').then((length) => {
+    for (let i = 0; i < length; i++) {
+      page.basketItemNames().eq(i).then(($el) => {
+        itemsBasketNamesArr.push($el.text());
+        basketItemsCount++;
+      })
+    }
   });
 
-  page.basketPriceValues().each(($el) => {
-    const priceStr = $el.text().replace(/\D/g, "");
-    const priceInt = Number(priceStr);
-    priceBasketArr.unshift(priceInt);
-    basketCalcSum += priceInt;
+  page.basketPriceValues().its('length').then((length) => {
+    for (let i = 0; i < length; i++) {
+      page.basketPriceValues().eq(i).then(($el) => {
+        const priceStr = $el.text().replace(/\D/g, "");
+        const priceInt = Number(priceStr);
+        priceBasketArr.unshift(priceInt);
+        basketCalcSum += priceInt;
+      })
+    }
   });
 
   page.basketSum().then(($el) => {

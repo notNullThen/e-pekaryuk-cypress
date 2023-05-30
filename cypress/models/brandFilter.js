@@ -7,8 +7,12 @@ export function brandFilter(brandName, check) {
   cy.clickBrandFilter(brandName);
   cy.waitGetPrice();
   if (check) {
-    itemsPage.itemNames().each(($el) => {
-      expect($el.text()).contains(brandName);
+    itemsPage.itemNames().its('length').then((length) => {
+      for (let i = 0; i < length; i++) {
+        itemsPage.itemNames().eq(i).then(($el) => {
+          expect($el.text()).contains(brandName);
+        })
+      }
     });
   }
 }
