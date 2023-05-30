@@ -48,22 +48,13 @@ export function checkItemsPrices(minPrice, maxPrice) {
 }
 
 export function selectSortingOption(optionNum, check) {
-  let optionName = "";
-
-  switch (optionNum) {
-    case 1:
-      optionName = "1: cheap";
-      break;
-    case 2:
-      optionName = "2: expensive";
-      break;
-    case 3:
-      optionName = "3: novelty";
-      break;
-    case 4:
-      optionName = "4: rank";
-      break;
-  }
+  const options = {
+    1: "1: cheap",
+    2: "2: expensive",
+    3: "3: novelty",
+    4: "4: rank",
+  };
+  const optionName = options[optionNum];
 
   cy.interceptGetPrice();
   itemsPage.sortingSelector().select(optionName);
@@ -85,14 +76,16 @@ export function selectSortingOption(optionNum, check) {
               if (i == 0) {
                 prevElem = priceInt;
               } else {
-                switch (optionNum) {
-                  case 1:
+                const options = {
+                  1: function (priceInt, prevElem) {
                     expect(priceInt >= prevElem).to.be.true;
-                    break;
-                  case 2:
+                  },
+                  2: function (priceInt, prevElem) {
                     expect(priceInt <= prevElem).to.be.true;
-                    break;
-                }
+                  },
+                };
+
+                options[optionNum](priceInt, prevElem);
               }
 
               prevElem = priceInt;

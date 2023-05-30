@@ -11,13 +11,13 @@ class Page {
     return cy.get("app-buy-button");
   }
   basketPriceValues() {
-    return cy.get('[data-testid="cost"]');
+    return cy.get("p.cart-product__price");
   }
   basketItemNames() {
-    return cy.get('[data-testid="title"]');
+    return cy.get("a.cart-product__title");
   }
   basketSum() {
-    return cy.get('[data-testid="cart-receipt-sum"] span');
+    return cy.get(".cart-receipt__sum div > span");
   }
   itemsThreeDotsBtns() {
     return cy.get("rz-popup-menu button");

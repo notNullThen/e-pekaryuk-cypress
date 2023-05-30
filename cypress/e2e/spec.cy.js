@@ -44,8 +44,9 @@ describe("template spec", () => {
   it("Should check the price sorting", () => {
     categoryNav(5, 96);
 
-    // true if want to check the price sorting
+    // true - if want to check the price sorting
     selectSortingOption(1, true);
+    selectSortingOption(2, true);
   });
 
   it("Should test the basket", () => {

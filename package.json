@@ -4,7 +4,9 @@
   "description": "Rozetka Cypress test",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "main-test": "cypress run --spec cypress/e2e/spec.cy.js",
+    "all-tests": "cypress run --spec cypress/e2e/*.cy.js"
   },
   "author": "Eugene Pekaryuk",
   "license": "ISC",
