@@ -1,12 +1,16 @@
-import { applyPriceFilter } from "../models/filtersSortings.js";
-import { checkItemsPrices } from "../models/filtersSortings.js";
-import { categoryNav } from "../models/categoriesNav.js";
+import {
+  applyPriceFilter,
+  checkItemsPrices,
+  selectSortingOption,
+} from "../models/filtersSortings.js";
+import { categoryNav, categoriesNamesCheck } from "../models/categoriesNav.js";
 import { brandFilter } from "../models/brandFilter.js";
-import { selectSortingOption } from "../models/filtersSortings.js";
-import { categoriesNamesCheck } from "../models/categoriesNav.js";
 import { checkBasket } from "../models/basket.js";
-import { searchSuggestionsCheck } from "../models/search.js";
-import { searchItemsCheck } from "../models/search.js";
+import { searchSuggestionsCheck, searchItemsCheck } from "../models/search.js";
+import {
+  checkFullAgePopUpDecline,
+  checkFullAgePopUpConfirm,
+} from "../models/age18.js";
 
 describe("template spec", () => {
   beforeEach(() => {
@@ -58,6 +62,13 @@ describe("template spec", () => {
     const searchQuery = "GoOgLe PiXeL";
     searchSuggestionsCheck(searchQuery);
     searchItemsCheck(searchQuery);
+  });
+
+  it("Should test the Age 18+ confirmation pup-up", () => {
+    categoryNav(16, 5);
+    checkFullAgePopUpDecline();
+    categoryNav(16, 5);
+    checkFullAgePopUpConfirm();
   });
 
   it("Should check the items names to contain the filtered brand name", () => {
