@@ -24,7 +24,7 @@ export function checkBasket(itemsCount) {
     }
   });
 
-  page.itemsBasketBtn().then(($els) => {
+  itemsPage.itemsBasketBtn().then(($els) => {
     for (let i = 0; i < itemsCount; i++) {
       cy.interceptAddToBusket();
       cy.wrap($els.eq(i)).click();
@@ -32,7 +32,9 @@ export function checkBasket(itemsCount) {
     }
   });
 
+  cy.interceptGetCartBlocks();
   page.basketBtn().click();
+  cy.waitGetCartBlocks();
 
   let itemsBasketNamesArr = [];
   let priceBasketArr = [];
@@ -72,9 +74,49 @@ export function checkBasket(itemsCount) {
     });
 
   page.basketSum().then(($el) => {
-    cy.wrap(priceStoreSum).should("deep.equal", basketCalcSum);
     const basketItemsPricesSum = Number($el.text().replace(/\D/g, ""));
-    cy.wrap(priceStoreSum).should("deep.equal", basketItemsPricesSum);
+    cy.wrap(priceStoreSum).should("deep.equal", basketCalcSum);
+    cy.wrap(basketCalcSum).should("deep.equal", basketItemsPricesSum);
     cy.wrap(priceStoreArr).should("deep.equal", priceBasketArr);
   });
+
+  page
+    .basketPriceValues()
+    .its("length")
+    .then((length) => {
+      for (let i = 0; i < length; i++) {
+        let deletedItemPriceInt = 0;
+        page
+          .basketPriceValues()
+          .eq(0)
+          .then(($el) => {
+            const deletedItemPriceStr = $el.text();
+            deletedItemPriceInt = Number(
+              deletedItemPriceStr.replace(/\D/g, "")
+            );
+            basketCalcSum -= deletedItemPriceInt;
+          });
+        page.itemsThreeDotsBtns().eq(0).click();
+        cy.interceptCartItemDelete();
+        cy.interceptGetCartBlocks();
+        page.itemDeleteBtn().click();
+        cy.waitCartItemDelete();
+        cy.waitGetCartBlocks();
+        /* eslint-disable cypress/no-unnecessary-waiting */
+        cy.wait(1000);
+        /* eslint-enable cypress/no-unnecessary-waiting */
+        if (i < length - 1) {
+          page.basketSum().then(($el) => {
+            const basketItemsPricesSum = Number($el.text().replace(/\D/g, ""));
+            cy.wrap(basketCalcSum).should("deep.equal", basketItemsPricesSum);
+          });
+        } else {
+          page.basketItemNames().should("not.exist");
+          page.itemsThreeDotsBtns().should("not.exist");
+          page.basketPriceValues().should("not.exist");
+          page.basketSum().should("not.exist");
+          page.itemDeleteBtn().should("not.exist");
+        }
+      }
+    });
 }

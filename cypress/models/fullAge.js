@@ -2,7 +2,6 @@ import Page from "../pageobjects/page.js";
 import ItemsPage from "../pageobjects/itemsPage.js";
 
 const page = new Page();
-const itemsPage = new ItemsPage();
 
 export function checkFullAgePopUpDecline(itemsCount) {
   page.declineBtn().click({ timeout: 10000 });

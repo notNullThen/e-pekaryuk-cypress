@@ -3,22 +3,12 @@ import {
   checkItemsPrices,
   selectSortingOption,
 } from "../models/filtersSortings.js";
-import { categoryNav, categoriesNamesCheck } from "../models/categoriesNav.js";
+import { categoryNav } from "../models/categoriesNav.js";
 import { brandFilter } from "../models/brandFilter.js";
-import { checkBasket } from "../models/basket.js";
-import { searchSuggestionsCheck, searchItemsCheck } from "../models/search.js";
-import {
-  checkFullAgePopUpDecline,
-  checkFullAgePopUpConfirm,
-} from "../models/age18.js";
 
-describe("template spec", () => {
+describe("Items Page tests", () => {
   beforeEach(() => {
     cy.visit("/");
-  });
-
-  it("Compare the sidebar categories names with opened pages names", () => {
-    categoriesNamesCheck();
   });
 
   it("Should check the price filter", () => {
@@ -51,24 +41,6 @@ describe("template spec", () => {
     // true - if want to check the price sorting
     selectSortingOption(1, true);
     selectSortingOption(2, true);
-  });
-
-  it("Should test the basket", () => {
-    categoryNav(8, 5);
-    checkBasket(5);
-  });
-
-  it("Should test the search function", () => {
-    const searchQuery = "GoOgLe PiXeL";
-    searchSuggestionsCheck(searchQuery);
-    searchItemsCheck(searchQuery);
-  });
-
-  it("Should test the Age 18+ confirmation pup-up", () => {
-    categoryNav(16, 5);
-    checkFullAgePopUpDecline();
-    categoryNav(16, 5);
-    checkFullAgePopUpConfirm();
   });
 
   it("Should check the items names to contain the filtered brand name", () => {

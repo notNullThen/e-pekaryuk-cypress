@@ -7,9 +7,7 @@ class Page {
   basketBtn() {
     return cy.get(".header-actions__item--cart");
   }
-  itemsBasketBtn() {
-    return cy.get("app-buy-button");
-  }
+
   basketPriceValues() {
     return cy.get("p.cart-product__price");
   }

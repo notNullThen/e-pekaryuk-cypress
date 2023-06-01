@@ -6,6 +6,10 @@ class ItemsPage {
     return cy.get("app-goods-tile-default div > a > span");
   }
 
+  itemsBasketBtn() {
+    return cy.get("app-buy-button");
+  }
+
   filterCheckboxes() {
     return cy.get("aside a");
   }

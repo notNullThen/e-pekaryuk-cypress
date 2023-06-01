@@ -60,6 +60,24 @@ Cypress.Commands.add("waitSearchAutocomplete", () => {
     .should("eq", 200);
 });
 
+Cypress.Commands.add("interceptCartItemDelete", () => {
+  cy.intercept("POST", /.*cart-se\/delete.*/).as("cart-item-delete");
+});
+Cypress.Commands.add("waitCartItemDelete", () => {
+  cy.wait("@cart-item-delete", { timeout: 10000 })
+    .its("response.statusCode")
+    .should("eq", 200);
+});
+
+Cypress.Commands.add("interceptGetCartBlocks", () => {
+  cy.intercept("GET", /.*get-cart-blocks.*/).as("get-cart-blocks");
+});
+Cypress.Commands.add("waitGetCartBlocks", () => {
+  cy.wait("@get-cart-blocks", { timeout: 10000 })
+    .its("response.statusCode")
+    .should("eq", 200);
+});
+
 Cypress.Commands.add("clickBrandFilter", (brandName) => {
   cy.get(`[data-id=${brandName}]`).click();
 });

@@ -4,9 +4,10 @@
   "description": "Rozetka Cypress test",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "main-test": "cypress run --spec cypress/e2e/spec.cy.js",
-    "all-tests": "cypress run --spec cypress/e2e/*.cy.js"
+    "all-tests": "cypress run --spec cypress/e2e/*.cy.js",
+    "home-page-test": "cypress run --spec cypress/e2e/homePage.cy.js",
+    "items-page-test": "cypress run --spec cypress/e2e/itemsPage.cy.js",
+    "pop-ups-test": "cypress run --spec cypress/e2e/popUps.cy.js"
   },
   "author": "Eugene Pekaryuk",
   "license": "ISC",
