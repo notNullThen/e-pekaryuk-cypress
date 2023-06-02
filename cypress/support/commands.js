@@ -23,12 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.add("interceptLabels", () => {
-  cy.intercept("GET", /.*goods\/labels.*/).as("get-labels");
+Cypress.Commands.add("interceptShort", (method, endpoint, alias) => {
+  cy.intercept(method, endpoint).as(alias);
 });
-Cypress.Commands.add("waitLabels", () => {
-  cy.wait("@get-labels", { timeout: 10000 })
+Cypress.Commands.add("waitShort", (alias) => {
+  cy.wait(`@${alias}`, { timeout: 10000 })
     .its("response.statusCode")
     .should("eq", 200);
 });
