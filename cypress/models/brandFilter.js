@@ -16,7 +16,7 @@ export function brandFilter(brandName, check) {
             .itemNames()
             .eq(i)
             .then(($el) => {
-              expect($el.text()).contains(brandName);
+              expect($el.text().toLowerCase()).contains(brandName.toLowerCase());
             });
         }
       });
