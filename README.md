@@ -6,6 +6,12 @@
     npm install
 ```
 
+### For running Cypress UI:
+
+```bash
+    npx cypress open
+```
+
 ### For running Main test:
 
 ```bash
